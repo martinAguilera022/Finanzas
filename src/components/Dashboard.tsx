@@ -87,7 +87,8 @@ export default function Dashboard() {
         <div className="max-w-md mx-auto min-h-screen h-full p-6 bg-gray-50 shadow-lg">
         {user && 
         <>
-        <Header userName={user?.displayName} walletName={wallet.name} />
+        <Header userName={user?.displayName ?? undefined} walletName={wallet.name} />
+
         <WalletBalance balance={wallet.balance || 0} />
         <ActionButtons userId={user.uid} walletId={walletId!} />
         <div className="mb-4 border-b border-gray-300 mt-8">
