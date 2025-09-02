@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
 
 interface Wallet {
   id: string;
@@ -13,6 +14,17 @@ interface Wallet {
 }
 
 export default function WalletSelector() {
+  const handleLogout = async () => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+    console.log("Sesión cerrada ✅");
+    navigate("/"); // redirige al login
+  } catch (error) {
+    console.error("Error al cerrar sesión", error);
+  }
+};
+
   const { user, loading } = useAuth();
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const navigate = useNavigate();
@@ -72,14 +84,15 @@ export default function WalletSelector() {
   if (loading) return <div>Cargando...</div>;
 
   return (
-    <div className="min-h-screen w-full bg-white flex flex-col items-center px-6 py-2">
-      <div className="w-full flex justify-start mb-8">
+    <div className="min-h-screen w-full bg-white flex flex-col items-center px-6 py-12">
+      <div className="w-full flex justify-between mb-8">
         <div className="grid grid-cols-2">
-          <div className="bg-green-900 w-4 h-4 rounded-sm"></div>
+          <div className="bg-green-900 w-6 h-6 rounded-sm"></div>
           <div className="bg-white w-4 h-4 rounded-sm"></div>
           <div className="bg-white w-4 h-4 rounded-sm"></div>
-          <div className="bg-green-900 w-4 h-4 rounded-sm"></div>
+          <div className="bg-green-900 w-6 h-6 rounded-sm"></div>
         </div>
+        <button onClick={handleLogout}><img src="/assets/salida.png" alt="" /></button>
       </div>
 
       <h1 className="text-xl text-green-900 leading-snug font-bold mb-4">

@@ -21,6 +21,7 @@ export const Header: React.FC<HeaderProps> = ({ userName = "Usuario", walletName
       <button onClick={goToWalletList}>
         <img src="/assets/billetera.png" alt="Wallets" className="w-8 h-8" />
       </button>
+      
     </div>
   );
 };
