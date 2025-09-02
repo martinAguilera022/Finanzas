@@ -52,12 +52,7 @@ const OnboardingScreen: React.FC = () => {
           Iniciar sesión con Google
         </button>
 
-        <p className="text-sm text-green-900">
-          ¿Ya tienes una cuenta?{" "}
-          <a href="#" className="font-semibold underline">
-            Inicia Sesión
-          </a>
-        </p>
+        
       </div>
     </div>
   );
