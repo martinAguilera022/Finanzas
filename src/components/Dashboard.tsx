@@ -93,29 +93,29 @@ export default function Dashboard() {
         <ActionButtons userId={user.uid} walletId={walletId!} />
         <div className="mb-4 border-b border-gray-300 mt-8">
   <div className="flex">
-    <button
-      className={`flex-1 py-2 text-center font-semibold ${
-        showChart ? "border-b-2 border-green-700 text-green-700" : "text-gray-500"
-      }`}
-      onClick={() => setShowChart(true)}
-    >
-      Gráfico
-    </button>
-
-    <button
-      className={`flex-1 py-2 text-center font-semibold ${
-        !showChart ? "border-b-2 border-green-700 text-green-700" : "text-gray-500"
-      }`}
-      onClick={() => setShowChart(false)}
-    >
-      Movimientos
-    </button>
-  </div>
+  <button
+    className={`flex-1 py-2 text-center font-semibold ${
+      showChart ? "border-b-2 border-green-700 text-green-700" : "text-gray-500"
+    }`}
+    onClick={() => setShowChart(true)}
+  >
+    Movimientos
+  </button>
+  <button
+    className={`flex-1 py-2 text-center font-semibold ${
+      !showChart ? "border-b-2 border-green-700 text-green-700" : "text-gray-500"
+    }`}
+    onClick={() => setShowChart(false)}
+  >
+    Gráfico
+  </button>
+</div>
 </div>
             {showChart ? (
-  <MovementsChart ingresos={totals.ingresos} gastos={totals.gastos} />
-) : (
   <RecentActivity userId={user.uid} walletId={walletId!} />
+) : (
+  
+  <MovementsChart ingresos={totals.ingresos} gastos={totals.gastos} />
 )}
 
         </>
