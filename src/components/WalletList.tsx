@@ -59,7 +59,7 @@ export default function WalletSelector() {
           <input
             id="wallet-name"
             placeholder="Nombre de la wallet"
-            className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-[#0d542b]"
+            className="border text-[#0d542b] border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-[#0d542b]"
           />
           <select
             id="wallet-type"
