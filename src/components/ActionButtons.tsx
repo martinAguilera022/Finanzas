@@ -62,7 +62,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ userId, walletId }
         className="flex-1 flex items-center justify-center gap-2 bg-green-700 text-white py-2 rounded-xl font-semibold hover:bg-green-800"
         onClick={() => handleAdd("Ingreso")}
       >
-        <img src="../../public/assets/ingreso.png" alt="" className="w-6 h-6"/>
+        <img src="/assets/ingreso.png" alt="" className="w-6 h-6"/>
         Ingreso
       </button>
 
@@ -70,7 +70,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ userId, walletId }
         className="flex-1 flex items-center justify-center gap-2 bg-green-200 text-green-700 py-2 rounded-xl font-semibold hover:bg-green-300"
         onClick={() => handleAdd("Gasto")}
       >
-        <img src="../../public/assets/gasto.png" alt="" className="w-6 h-6"/>
+        <img src="/assets/gasto.png" alt="" className="w-6 h-6"/>
         Gasto
       </button>
     </div>

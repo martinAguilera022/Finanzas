@@ -19,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({ userName = "Usuario", walletName
         {walletName && <p className="text-sm text-gray-400">Wallet: {walletName}</p>}
       </div>
       <button onClick={goToWalletList}>
-        <img src="../../public/assets/billetera.png" alt="Wallets" className="w-8 h-8" />
+        <img src="/assets/billetera.png" alt="Wallets" className="w-8 h-8" />
       </button>
     </div>
   );
