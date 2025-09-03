@@ -122,31 +122,39 @@ export default function WalletSelector() {
           <img src="/assets/salida.png" alt="Salir" />
         </button>
       </div>
-
-      <h1 className="text-xl text-green-900 leading-snug font-bold mb-4">
-        Selecciona tu Wallet
-      </h1>
-
-      <div className="w-full max-w-md mb-8">
-        <ul className="flex flex-col gap-2">
-          {wallets.map((wallet) => (
-            <li
-              key={wallet.id}
-              className="p-4 bg-green-100 text-green-900 rounded-md font-medium flex justify-between cursor-pointer"
-              onClick={() => navigate(`/dashboard/${wallet.id}`)}
-            >
-              <span>{wallet.name}</span>
-              <span className="italic text-sm">{wallet.type}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+<div className="w-full max-w-md mb-8 ">
+  {wallets.length === 0 ? (
+    <div className="flex flex-col items-center gap-4">
+      <p className="text-lg text-gray-400 text-center">
+        ¡No tienes wallets aún!
+      </p>
+      <p className="text-green-900 font-semibold text-center">
+        Crea tu primera wallet para empezar
+      </p>
+    </div>
+  ) : (
+    
+    <ul className="flex flex-col  gap-2">
+      <h2 className="mb-4  text-green-900 text-5xl text-center font-semibold">Tus Wallets</h2>
+      {wallets.map((wallet) => (
+        <li
+          key={wallet.id}
+          className="p-4 bg-green-100 text-green-900 rounded-md font-medium flex justify-between cursor-pointer hover:bg-green-200 transition"
+          onClick={() => navigate(`/dashboard/${wallet.id}`)}
+        >
+          <span>{wallet.name}</span>
+          <span className="italic text-sm">{wallet.type}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
 
       <button
         className="bg-green-900 text-white px-6 min-w-full py-3 rounded-md text-lg"
         onClick={handleAddWallet}
       >
-        Agregar Wallet
+       + Agregar Wallet
       </button>
     </div>
   );

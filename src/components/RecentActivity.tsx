@@ -8,6 +8,7 @@ interface RecentActivityProps {
 }
 
 export const RecentActivity: React.FC<RecentActivityProps> = ({ userId, walletId }) => {
+  
   const [movements, setMovements] = useState<any[]>([]);
 
   useEffect(() => {
@@ -22,14 +23,36 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ userId, walletId
         <h3 className="text-gray-600 font-medium">Movimientos Recientes</h3>
         
       </div>
-      <div className="space-y-2">
-        {movements.length > 0 ? (
-          movements.map((mov) => (
-            <Movement key={mov.id} type={mov.type} amount={mov.amount} description={mov.description} />
-          ))
-        ) : (
-          <p className="text-gray-400 text-sm">No hay movimientos aún</p>
-        )}
+         <div className="space-y-2">
+       {movements.length > 0 ? (
+  movements.map((mov) => {
+ let date: Date;
+
+  if (mov.createdAt?.toDate) {
+    date = mov.createdAt.toDate(); // Timestamp real
+  } else if (mov.createdAt?._seconds) {
+    date = new Date(mov.createdAt._seconds * 1000); // Timestamp serializado
+  } else if (typeof mov.createdAt === "number") {
+    date = new Date(mov.createdAt); // Milisegundos
+  } else {
+    date = new Date(mov.createdAt); // String o fallback
+  }
+
+
+  return (
+    <Movement
+      key={mov.id}
+      type={mov.type}
+      amount={mov.amount}
+      description={mov.description}
+      date={date}
+    />
+  );
+})
+
+) : (
+  <p className="text-gray-600 text-center">No hay movimientos recientes</p>
+)}
       </div>
     </>
   );

@@ -21,9 +21,20 @@ export const subscribeMovements = (
   walletId: string,
   callback: (movements: any[]) => void
 ) => {
-  const q = query(collection(db, "users", userId, "wallets", walletId, "movements"), orderBy("createdAt", "desc"));
+  const q = query(
+    collection(db, "users", userId, "wallets", walletId, "movements"),
+    orderBy("createdAt", "desc")
+  );
+
   return onSnapshot(q, (snapshot) => {
-    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = snapshot.docs.map((doc) => {
+      const docData = doc.data();
+      return {
+        id: doc.id,
+        ...docData,
+        createdAt: docData.createdAt ? docData.createdAt.toDate() : null,
+      };
+    });
     callback(data);
   });
 };
