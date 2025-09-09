@@ -7,6 +7,7 @@ import Dashboard from "./components/Dashboard";
 import WalletLayout from "./components/WalletLayout";
 import Stats from "./components/Stats"; // <-- importamos la página de stats
 import { AllMovements } from "./components/AllMovements";
+import ScanTicketPage from "./components/ScanTicketPage"
 const App: React.FC = () => {
   const { user, loading } = useAuth();
 
@@ -48,7 +49,7 @@ const App: React.FC = () => {
                 </WalletLayout>
               }
             />
-         
+    
               <Route
               path="/movements/:walletId"
               element={
@@ -57,6 +58,9 @@ const App: React.FC = () => {
                 </WalletLayout>
               }
             />
+            <Route path="/scan/:walletId" element={ <WalletLayout>
+                  <ScanTicketPage />
+                </WalletLayout>} />
 
           </>
         )}

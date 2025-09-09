@@ -48,9 +48,9 @@ export function ChartAreaInteractive({ userId, walletId }: ChartAreaInteractiveP
   // Generar datos diarios para el gráfico
   const chartData = React.useMemo(() => {
     const today = new Date()
-    let days = 90
+    let days = 7
     if (timeRange === "30d") days = 30
-    else if (timeRange === "7d") days = 7
+    else if (timeRange === "90d") days = 90
 
     const data: { date: string; ingresos: number; gastos: number }[] = []
     for (let i = days - 1; i >= 0; i--) {
@@ -84,9 +84,10 @@ export function ChartAreaInteractive({ userId, walletId }: ChartAreaInteractiveP
             <SelectValue placeholder="Selecciona rango" />
           </SelectTrigger>
           <SelectContent className="rounded-xl border-none z-10 bg-white">
+              <SelectItem value="7d" className="rounded-lg">Últimos 7 días</SelectItem>
             <SelectItem value="90d" className="rounded-lg">Últimos 3 meses</SelectItem>
             <SelectItem value="30d" className="rounded-lg">Últimos 30 días</SelectItem>
-            <SelectItem value="7d" className="rounded-lg">Últimos 7 días</SelectItem>
+          
           </SelectContent>
         </Select>
       </CardHeader>
