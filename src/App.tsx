@@ -4,6 +4,8 @@ import useAuth from "./hooks/useAuth";
 import OnboardingScreen from "./components/Onboarding";
 import WalletList from "./components/WalletList";
 import Dashboard from "./components/Dashboard";
+import WalletLayout from "./components/WalletLayout";
+import Stats from "./components/Stats"; // <-- importamos la página de stats
 
 const App: React.FC = () => {
   const { user, loading } = useAuth();
@@ -28,7 +30,24 @@ const App: React.FC = () => {
             <Route path="/" element={<WalletList />} />
 
             {/* Dashboard de wallet específica */}
-            <Route path="/dashboard/:walletId" element={<Dashboard />} />
+            <Route
+              path="/dashboard/:walletId"
+              element={
+                <WalletLayout>
+                  <Dashboard />
+                </WalletLayout>
+              }
+            />
+
+            {/* Estadísticas de la wallet */}
+            <Route
+              path="/stats/:walletId"
+              element={
+                <WalletLayout>
+                  <Stats />
+                </WalletLayout>
+              }
+            />
           </>
         )}
       </Routes>

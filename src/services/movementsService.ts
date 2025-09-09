@@ -6,12 +6,14 @@ export const addMovement = async (
   walletId: string,
   type: "Ingreso" | "Gasto",
   amount: number,
-  description: string
+  description: string,
+  category: string
 ) => {
   await addDoc(collection(db, "users", userId, "wallets", walletId, "movements"), {
     type,
     amount,
     description,
+    category,
     createdAt: serverTimestamp(),
   });
 };

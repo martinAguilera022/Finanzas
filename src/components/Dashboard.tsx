@@ -1,26 +1,26 @@
-    import { useParams } from "react-router-dom";
-    import useAuth from "../hooks/useAuth";
-    import { useEffect, useState } from "react";
-    import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
-    import { db } from "../firebase";
-    import { Header } from "./Header";
-    import { WalletBalance } from "./WalletBalance";
-    import { ActionButtons } from "./ActionButtons";
-    import { RecentActivity } from "./RecentActivity";
-    import { MovementsChart } from "./MovementsChart";
+import { useParams } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { useEffect, useState } from "react";
+import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
+import { Header } from "./Header";
+import { WalletBalance } from "./WalletBalance";
+import { ActionButtons } from "./ActionButtons";
+import { RecentActivity } from "./RecentActivity";
+import { MovementsChart } from "./MovementsChart";
+import { ChartAreaInteractive } from "./ChartAreaInteractive";
 
-
-    interface Wallet {
-    name: string;
-    type: string;
-    balance?: number;
-    }
+interface Wallet {
+  name: string;
+  type: string;
+  balance?: number;
+}
 
 export default function Dashboard() {
   const { walletId } = useParams();
   const { user, loading } = useAuth();
   const [wallet, setWallet] = useState<Wallet | null>(null);
-  const [totals, setTotals] = useState({ ingresos: 0, gastos: 0 }); // <- estado para gráfico
+  const [totals, setTotals] = useState({ ingresos: 0, gastos: 0 }); 
   const [showChart, setShowChart] = useState(true);
 
   // Cargar datos de la wallet
@@ -36,7 +36,7 @@ export default function Dashboard() {
     fetchWallet();
   }, [user, walletId]);
 
-  // **Este useEffect reemplaza al anterior de movimientos**
+  // Escuchar movimientos y actualizar balance + totales
   useEffect(() => {
     if (!user || !walletId) return;
     const movementsRef = collection(db, "users", user.uid, "wallets", walletId, "movements");
@@ -64,62 +64,27 @@ export default function Dashboard() {
     return () => unsub();
   }, [user, walletId]);
 
-    // Actualizar balance en tiempo real según movimientos
-    useEffect(() => {
-        if (!user || !walletId) return;
-        const movementsRef = collection(db, "users", user.uid, "wallets", walletId, "movements");
-        const unsub = onSnapshot(movementsRef, (snapshot) => {
-        let total = 0;
-        snapshot.docs.forEach(doc => {
-            const mov = doc.data();
-            total += mov.type === "Ingreso" ? mov.amount : -mov.amount;
-        });
-        setWallet(prev => prev ? { ...prev, balance: total } : prev);
-        });
+  if (loading) return <div>Cargando usuario...</div>;
+  if (!wallet) return <div>Wallet no encontrada.</div>;
 
-        return () => unsub();
-    }, [user, walletId]);
-
-    if (loading) return <div>Cargando usuario...</div>;
-    if (!wallet) return <div>Wallet no encontrada.</div>;
-
-    return (
-        <div className="max-w-md mx-auto min-h-screen h-full p-6 bg-gray-50 shadow-lg">
-        {user && 
+  return (
+    <div className="max-w-md mx-auto min-h-screen h-full p-6 bg-gray-50 shadow-lg">
+      {user && (
         <>
-        <Header userName={user?.displayName ?? undefined} walletName={wallet.name} />
+          <Header userName={user?.displayName ?? undefined} walletName={wallet.name} />
 
-        <WalletBalance balance={wallet.balance || 0} />
-        <ActionButtons userId={user.uid} walletId={walletId!} />
-        <div className="mb-4 border-b border-gray-300 mt-8">
-  <div className="flex">
-  <button
-    className={`flex-1 py-2 text-center font-semibold ${
-      showChart ? "border-b-2 border-green-700 text-green-700" : "text-gray-500"
-    }`}
-    onClick={() => setShowChart(true)}
-  >
-    Movimientos
-  </button>
-  <button
-    className={`flex-1 py-2 text-center font-semibold ${
-      !showChart ? "border-b-2 border-green-700 text-green-700" : "text-gray-500"
-    }`}
-    onClick={() => setShowChart(false)}
-  >
-    Gráfico
-  </button>
-</div>
-</div>
-            {showChart ? (
-  <RecentActivity userId={user.uid} walletId={walletId!} />
-) : (
-  
-  <MovementsChart ingresos={totals.ingresos} gastos={totals.gastos} />
-)}
+          <WalletBalance balance={wallet.balance || 0} />
+          <ActionButtons userId={user.uid} walletId={walletId!} />
 
+       
+
+          
+            <RecentActivity userId={user.uid} walletId={walletId!} />
+          
+            
+          
         </>
-        }
-        </div>
-    );
-    }
+      )}
+    </div>
+  );
+}

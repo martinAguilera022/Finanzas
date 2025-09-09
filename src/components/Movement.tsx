@@ -2,6 +2,7 @@ interface MovementProps {
   type: "Ingreso" | "Gasto";
   amount: number;
   description: string;
+  category:string;
   date?: Date | string;
 }
 function formatDateRelative(date: Date) {

@@ -45,6 +45,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ userId, walletId
       type={mov.type}
       amount={mov.amount}
       description={mov.description}
+      category={mov.category}
       date={date}
     />
   );
