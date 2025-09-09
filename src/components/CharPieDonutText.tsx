@@ -1,7 +1,7 @@
 
 
 import * as React from "react"
-import { TrendingUp } from "lucide-react"
+
 import { Label, Pie, PieChart } from "recharts"
 import { collection, onSnapshot } from "firebase/firestore"
 import { db } from "../firebase"
@@ -18,7 +18,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Value } from "@radix-ui/react-select"
 
 interface ChartPieDonutInteractiveProps {
   userId: string

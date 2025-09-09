@@ -1,16 +1,13 @@
 import { useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
-import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
+
 import { db } from "../firebase";
 import { ChartAreaInteractive } from "./ChartAreaInteractive";
 import { MovementsChart } from "./MovementsChart";
 import { ChartPieDonutInteractive } from "./CharPieDonutText";
-interface Wallet {
-  name: string;
-  type: string;
-  balance?: number;
-}
+
 
 export default function Stats() {
   const { walletId } = useParams<{ walletId: string }>();

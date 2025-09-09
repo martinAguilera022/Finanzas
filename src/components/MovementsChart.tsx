@@ -1,6 +1,6 @@
 import React from "react";
 import { ResponsiveContainer, PieChart, Pie, Tooltip, Legend, Cell } from "recharts";
-import { ChartAreaInteractive} from "./ChartAreaInteractive";
+
 interface MovementsChartProps {
   ingresos: number;
   gastos: number;

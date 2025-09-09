@@ -7,8 +7,6 @@ import { Header } from "./Header";
 import { WalletBalance } from "./WalletBalance";
 import { ActionButtons } from "./ActionButtons";
 import { RecentActivity } from "./RecentActivity";
-import { MovementsChart } from "./MovementsChart";
-import { ChartAreaInteractive } from "./ChartAreaInteractive";
 
 interface Wallet {
   name: string;
@@ -20,9 +18,6 @@ export default function Dashboard() {
   const { walletId } = useParams();
   const { user, loading } = useAuth();
   const [wallet, setWallet] = useState<Wallet | null>(null);
-  const [totals, setTotals] = useState({ ingresos: 0, gastos: 0 }); 
-  const [showChart, setShowChart] = useState(true);
-
   // Cargar datos de la wallet
   useEffect(() => {
     const fetchWallet = async () => {
@@ -58,7 +53,7 @@ export default function Dashboard() {
       });
 
       setWallet(prev => prev ? { ...prev, balance: totalBalance } : prev);
-      setTotals({ ingresos, gastos });
+      
     });
 
     return () => unsub();
