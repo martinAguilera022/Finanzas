@@ -11,7 +11,7 @@ interface RecentActivityProps {
 export const RecentActivity: React.FC<RecentActivityProps> = ({ userId, walletId }) => {
   const [movements, setMovements] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filterType, setFilterType] = useState<"Todos" | "Ingreso" | "Gasto">("Todos");
+ 
   const navigate = useNavigate();
   useEffect(() => {
     if (!userId || !walletId) return;
@@ -25,18 +25,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ userId, walletId
     return () => unsubscribe();
   }, [userId, walletId]);
 
-  // Filtrar por tipo
-  const filteredMovements = movements.filter((mov) => {
-    if (filterType === "Todos") return true;
-    return mov.type === filterType;
-  });
-
-  // Ordenar por fecha descendente
-  const sortedMovements = [...filteredMovements].sort((a, b) => {
-    const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : a.createdAt?._seconds ? new Date(a.createdAt._seconds * 1000) : new Date(a.createdAt);
-    const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : b.createdAt?._seconds ? new Date(b.createdAt._seconds * 1000) : new Date(b.createdAt);
-    return dateB.getTime() - dateA.getTime();
-  });
+  
 
 
 
@@ -64,8 +53,8 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ userId, walletId
               </div>
             ))}
           </>
-        ) : sortedMovements.length > 0 ? (
-          sortedMovements.map((mov) => {
+        ) : movements.length > 0 ? (
+          movements.map((mov) => {
             let date: Date;
 
             if (mov.createdAt?.toDate) date = mov.createdAt.toDate();
