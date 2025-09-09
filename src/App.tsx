@@ -6,7 +6,7 @@ import WalletList from "./components/WalletList";
 import Dashboard from "./components/Dashboard";
 import WalletLayout from "./components/WalletLayout";
 import Stats from "./components/Stats"; // <-- importamos la página de stats
-
+import { AllMovements } from "./components/AllMovements";
 const App: React.FC = () => {
   const { user, loading } = useAuth();
 
@@ -48,6 +48,16 @@ const App: React.FC = () => {
                 </WalletLayout>
               }
             />
+         
+              <Route
+              path="/movements/:walletId"
+              element={
+                <WalletLayout>
+                  <AllMovements />
+                </WalletLayout>
+              }
+            />
+
           </>
         )}
       </Routes>

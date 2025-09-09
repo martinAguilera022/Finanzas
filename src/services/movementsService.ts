@@ -1,4 +1,4 @@
-import { addDoc, collection, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp, onSnapshot, query, orderBy, limit } from "firebase/firestore";
 import { db } from "../firebase";
 
 export const addMovement = async (
@@ -25,7 +25,8 @@ export const subscribeMovements = (
 ) => {
   const q = query(
     collection(db, "users", userId, "wallets", walletId, "movements"),
-    orderBy("createdAt", "desc")
+    orderBy("createdAt", "desc"),
+    limit(10)
   );
 
   return onSnapshot(q, (snapshot) => {

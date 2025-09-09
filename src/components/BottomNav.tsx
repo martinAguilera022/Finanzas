@@ -14,19 +14,31 @@ const BottomNav: React.FC = () => {
   return (
     <nav className="fixed bottom-0 z-50 left-0 min-w-full shadow-t bg-green-700 flex justify-between px-8 items-center py-2">
       {navItems.map((item, idx) => (
-       <NavLink
-  key={idx}
-  to={item.path}
-  className={({ isActive }) =>
-    `flex flex-col items-center justify-center transition-all duration-300 relative px-6  ${
-      isActive
-        ? "text-green-700 bg-white rounded-full p-3 -translate-y-4 shadow-lg z-10"
-        : "text-green-200"
-    }`
-  }
->
-  {item.icon}
-</NavLink>
+        <NavLink
+          key={idx}
+          to={item.path}
+          className={({ isActive }) =>
+            `flex flex-col items-center justify-center transition-all duration-300 relative px-6`
+          }
+        >
+          {/* Notch + Icono Activo */}
+          {({ isActive }) => (
+            <>
+              {isActive && (
+                <span className="absolute -top-6 w-16 h-16 bg-green-700 rounded-t-full left-1/2 -translate-x-1/2 [clip-path:circle(50%_at_50%_0%)]" />
+              )}
+              <span
+                className={`relative z-10 transition-all duration-300 ${
+                  isActive
+                    ? "bg-white text-green-700 rounded-full p-3 shadow-lg -translate-y-4"
+                    : "text-green-200"
+                }`}
+              >
+                {item.icon}
+              </span>
+            </>
+          )}
+        </NavLink>
 
 
       ))}

@@ -102,12 +102,34 @@ export default function WalletSelector() {
     });
 
     if (formValues) {
+        Swal.fire({
+    title: 'Agregando wallet...',
+    didOpen: () => {
+      Swal.showLoading();
+    },
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    allowEnterKey: false,
+    background: "#ffffff",
+  });
+
       await addWallet(user.uid, formValues.name, formValues.type);
       Swal.fire("Wallet agregada!", `${formValues.name} - ${formValues.type}`, "success");
     }
   };
-
-  if (loading) return <div>Cargando...</div>;
+if (loading)
+  return (
+    <div className="min-h-screen w-full flex flex-col items-center px-6 py-12">
+      <div className="w-full max-w-md space-y-4">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="h-16 bg-gray-200 rounded-md animate-pulse"
+          />
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen w-full bg-white flex flex-col items-center px-6 py-12">

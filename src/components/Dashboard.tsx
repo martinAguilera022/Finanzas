@@ -7,7 +7,7 @@ import { Header } from "./Header";
 import { WalletBalance } from "./WalletBalance";
 import { ActionButtons } from "./ActionButtons";
 import { RecentActivity } from "./RecentActivity";
-
+import { Skeleton } from "@/components/ui/skeleton"
 interface Wallet {
   name: string;
   type: string;
@@ -18,48 +18,94 @@ export default function Dashboard() {
   const { walletId } = useParams();
   const { user, loading } = useAuth();
   const [wallet, setWallet] = useState<Wallet | null>(null);
-  // Cargar datos de la wallet
-  useEffect(() => {
-    const fetchWallet = async () => {
-      if (!user || !walletId) return;
-      const docRef = doc(db, "users", user.uid, "wallets", walletId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setWallet(docSnap.data() as Wallet);
-      }
-    };
-    fetchWallet();
-  }, [user, walletId]);
+  const [loadingWallet, setLoadingWallet] = useState(true);
 
-  // Escuchar movimientos y actualizar balance + totales
   useEffect(() => {
     if (!user || !walletId) return;
+
+    const docRef = doc(db, "users", user.uid, "wallets", walletId);
     const movementsRef = collection(db, "users", user.uid, "wallets", walletId, "movements");
 
-    const unsub = onSnapshot(movementsRef, (snapshot) => {
-      let totalBalance = 0;
-      let ingresos = 0;
-      let gastos = 0;
+    let unsubscribe: (() => void) | null = null;
 
-      snapshot.docs.forEach(doc => {
-        const mov = doc.data();
-        if (mov.type === "Ingreso") {
-          totalBalance += mov.amount;
-          ingresos += mov.amount;
+    const fetchAndListen = async () => {
+      try {
+        // 1️⃣ Traemos la wallet
+        const docSnap = await getDoc(docRef);
+        let walletData: Wallet | null = null;
+        if (docSnap.exists()) {
+          walletData = docSnap.data() as Wallet;
+          setWallet(walletData);
         } else {
-          totalBalance -= mov.amount;
-          gastos += mov.amount;
+          setWallet(null);
         }
-      });
 
-      setWallet(prev => prev ? { ...prev, balance: totalBalance } : prev);
-      
-    });
+        // 2️⃣ Nos suscribimos a los movimientos
+        unsubscribe = onSnapshot(movementsRef, (snapshot) => {
+          let totalBalance = 0;
 
-    return () => unsub();
+          snapshot.docs.forEach((doc) => {
+            const mov = doc.data();
+            totalBalance += mov.type === "Ingreso" ? mov.amount : -mov.amount;
+          });
+
+          // 🔑 Si la wallet ya estaba seteada, actualizamos su balance
+          // Si no, creamos un objeto con el balance
+          setWallet((prev) =>
+            prev
+              ? { ...prev, balance: totalBalance }
+              : walletData
+              ? { ...walletData, balance: totalBalance }
+              : null
+          );
+
+          setLoadingWallet(false);
+        });
+      } catch (err) {
+        console.error("Error cargando wallet:", err);
+        setLoadingWallet(false);
+      }
+    };
+
+    fetchAndListen();
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [user, walletId]);
 
   if (loading) return <div>Cargando usuario...</div>;
+  if (loadingWallet) {
+  return (
+    <div className="max-w-md mx-auto min-h-screen h-full p-6 bg-gray-50 shadow-lg">
+      {/* Header */}
+      <div className="mb-4">
+        <Skeleton className="h-6 w-40 mb-2 bg-gray-100" />
+        <Skeleton className="h-4 w-28" />
+      </div>
+
+      {/* Balance */}
+      <Skeleton className="h-10 w-24 bg-gray-100 mb-2" />
+      <div className="flex  mb-6">
+        
+        <Skeleton className="h-20 w-full bg-gray-100" />
+      </div>
+
+      {/* Botones de acción */}
+      <div className="flex gap-4 justify-center mb-6">
+        <Skeleton className="h-10 w-full rounded-full bg-gray-100" />
+        <Skeleton className="h-10 w-full rounded-full bg-gray-100" />
+      </div>
+
+      {/* Lista de movimientos */}
+      <div className="flex flex-col gap-2">
+        {[...Array(5)].map((_, i) => (
+          <Skeleton key={i} className="h-14 w-full rounded-xl bg-gray-100" />
+        ))}
+      </div>
+    </div>
+  );
+}
   if (!wallet) return <div>Wallet no encontrada.</div>;
 
   return (
@@ -67,17 +113,9 @@ export default function Dashboard() {
       {user && (
         <>
           <Header userName={user?.displayName ?? undefined} walletName={wallet.name} />
-
-          <WalletBalance balance={wallet.balance || 0} />
+          <WalletBalance balance={wallet.balance ?? 0} />
           <ActionButtons userId={user.uid} walletId={walletId!} />
-
-       
-
-          
-            <RecentActivity userId={user.uid} walletId={walletId!} />
-          
-            
-          
+          <RecentActivity userId={user.uid} walletId={walletId!} />
         </>
       )}
     </div>
